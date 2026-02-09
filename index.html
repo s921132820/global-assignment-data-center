@@ -10,7 +10,7 @@
 </head>
 <body>
   <header class="header">
-    <h1>해외 HR 데이터 센터</h1>
+    <h1>해외 국가 데이터 센터</h1>
     <nav>
       <a href="index.html">홈</a>
       <a href="pages/country.html">국가</a>
@@ -19,10 +19,52 @@
       <a href="pages/safety.html">치안</a>
     </nav>
   </header>
-  <main id="app"></main>
+  <div>
+    <h1 class="tx-center">해외 국가 데이터 센터</h1>
+    <p class="tx-center">해외 국가 데이터 센터는 해외 국가 데이터를 제공하는 서비스입니다.</p>
+  </div>
+  <div class="country-select-wrap">
+    <select name="country" id="country">
+      <option value="">국가를 선택해주세요.</option>
+    </select>
+    <button type="button" id="btn-select-country">선택완료</button>
+  </div>
+  <div id="app"></div>
 
   <script src="js/api/countryApi.js"></script>
   <script src="js/ui/countryUI.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var selectEl = document.getElementById('country');
+      var btnEl = document.getElementById('btn-select-country');
+      if (!selectEl || !btnEl) return;
+
+      CountryApi.loadCountries()
+        .then(function (countries) {
+          if (!countries || countries.length === 0) return;
+          countries.forEach(function (c) {
+            var name = c.countryNmae || c.countryName || c.name || '';
+            if (!name) return;
+            var opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            selectEl.appendChild(opt);
+          });
+        })
+        .catch(function (err) {
+          console.error('국가 목록 로드 실패:', err);
+        });
+
+      btnEl.addEventListener('click', function () {
+        var value = selectEl.value.trim();
+        if (!value) {
+          alert('국가를 선택해 주세요.');
+          return;
+        }
+        window.location.href = 'pages/country.html?name=' + encodeURIComponent(value);
+      });
+    })();
+  </script>
 </body>
 </html>

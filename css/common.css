@@ -26,3 +26,39 @@ main {
   margin: 0 auto;
   padding: 1.5rem;
 }
+
+.tx-center {
+  text-align: center;
+}
+
+.country-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem auto;
+  max-width: 400px;
+  padding: 0 1.5rem;
+}
+
+.country-select-wrap select {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.country-select-wrap #btn-select-country {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: #0066cc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.country-select-wrap #btn-select-country:hover {
+  background: #0052a3;
+}
