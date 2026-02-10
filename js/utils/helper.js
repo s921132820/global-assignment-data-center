@@ -4,7 +4,7 @@
   window.Utils = window.Utils || {};
   window.Utils.helper = {
     getParam: function (name) {
-      var params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
   };

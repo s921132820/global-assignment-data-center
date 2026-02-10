@@ -1,13 +1,13 @@
 (function (window) {
   'use strict';
 
-  var API_BASE = 'https://apis.data.go.kr/1262000/CountryBasicService';
-  var SERVICE_KEY = 'c538d63a42c23fe6fba4cacfceaa9f1aa638df34685f9a48c5fa5c30c730a08a';
-  var CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+  const API_BASE = 'https://apis.data.go.kr/1262000/CountryBasicService';
+  const SERVICE_KEY = 'c538d63a42c23fe6fba4cacfceaa9f1aa638df34685f9a48c5fa5c30c730a08a';
+  const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
   function buildUrl(endpoint, params) {
-    var query = ['serviceKey=' + encodeURIComponent(SERVICE_KEY), 'pageNo=1', 'numOfRows=100'];
-    for (var key in params) {
+    const query = ['serviceKey=' + encodeURIComponent(SERVICE_KEY), 'pageNo=1', 'numOfRows=100'];
+    for (const key in params) {
       if (params[key]) query.push(key + '=' + encodeURIComponent(params[key]));
     }
     return API_BASE + endpoint + '?' + query.join('&');
@@ -18,15 +18,15 @@
   }
 
   function getTag(text, tagName) {
-    var re = new RegExp('<' + tagName + '[^>]*>([\\s\\S]*?)<\\/' + tagName + '>', 'i');
-    var m = text.match(re);
+    const re = new RegExp('<' + tagName + '[^>]*>([\\s\\S]*?)<\\/' + tagName + '>', 'i');
+    const m = text.match(re);
     return m ? m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim() : '';
   }
 
   function parseItemXml(itemXml) {
-    var obj = {};
-    var tagRe = /<([a-zA-Z_][a-zA-Z0-9_]*)>([\s\S]*?)<\/\1>/g;
-    var tm;
+    const obj = {};
+    const tagRe = /<([a-zA-Z_][a-zA-Z0-9_]*)>([\s\S]*?)<\/\1>/g;
+    let tm;
     while ((tm = tagRe.exec(itemXml)) !== null) {
       obj[tm[1]] = tm[2].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
     }
@@ -34,33 +34,33 @@
   }
 
   function parseXmlByRegex(text) {
-    var resultCode = getTag(text, 'resultCode') || getTag(text, 'returnReasonCode');
-    var resultMsg = getTag(text, 'resultMsg');
+    const resultCode = getTag(text, 'resultCode') || getTag(text, 'returnReasonCode');
+    const resultMsg = getTag(text, 'resultMsg');
     if (resultCode && resultCode !== '00') throw new Error(resultMsg || 'API 오류');
 
-    var itemsMatch = text.match(/<items>([\s\S]*?)<\/items>/i);
+    const itemsMatch = text.match(/<items>([\s\S]*?)<\/items>/i);
     if (!itemsMatch) return null;
 
-    var itemMatch = itemsMatch[1].match(/<item>([\s\S]*?)<\/item>/i);
+    const itemMatch = itemsMatch[1].match(/<item>([\s\S]*?)<\/item>/i);
     if (!itemMatch) return null;
 
     return parseItemXml(itemMatch[1]);
   }
 
   function parseXmlListByRegex(text) {
-    var resultCode = getTag(text, 'resultCode') || getTag(text, 'returnReasonCode');
-    var resultMsg = getTag(text, 'resultMsg');
+    const resultCode = getTag(text, 'resultCode') || getTag(text, 'returnReasonCode');
+    const resultMsg = getTag(text, 'resultMsg');
     if (resultCode && resultCode !== '00') throw new Error(resultMsg || 'API 오류');
 
-    var itemsMatch = text.match(/<items>([\s\S]*?)<\/items>/i);
+    const itemsMatch = text.match(/<items>([\s\S]*?)<\/items>/i);
     if (!itemsMatch) return [];
 
-    var itemsXml = itemsMatch[1];
-    var itemRe = /<item>([\s\S]*?)<\/item>/gi;
-    var list = [];
-    var m;
+    const itemsXml = itemsMatch[1];
+    const itemRe = /<item>([\s\S]*?)<\/item>/gi;
+    const list = [];
+    let m;
     while ((m = itemRe.exec(itemsXml)) !== null) {
-      var obj = parseItemXml(m[1]);
+      const obj = parseItemXml(m[1]);
       if (obj) list.push(obj);
     }
     return list;
@@ -68,29 +68,29 @@
 
   function parseXmlResponse(text) {
     if (!text || (text.trim().indexOf('<') !== 0)) throw new Error('응답 형식 오류');
-    var trimmed = text.trim();
+    const trimmed = text.trim();
     if (trimmed.toLowerCase().indexOf('<html') >= 0 || trimmed.toLowerCase().indexOf('<!doctype') >= 0) {
       throw new Error('API가 HTML을 반환했습니다.');
     }
 
-    var result = null;
+    let result = null;
     try {
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(trimmed.replace(/^\uFEFF/, ''), 'text/xml');
-      var err = doc.querySelector('parsererror');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(trimmed.replace(/^\uFEFF/, ''), 'text/xml');
+      const err = doc.querySelector('parsererror');
       if (!err) {
-        var header = doc.getElementsByTagName('header')[0];
-        var body = doc.getElementsByTagName('body')[0];
-        var code = header ? (header.getElementsByTagName('resultCode')[0] || {}).textContent || '' : '';
-        var msg = header ? (header.getElementsByTagName('resultMsg')[0] || {}).textContent || '' : '';
+        const header = doc.getElementsByTagName('header')[0];
+        const body = doc.getElementsByTagName('body')[0];
+        const code = header ? (header.getElementsByTagName('resultCode')[0] || {}).textContent || '' : '';
+        const msg = header ? (header.getElementsByTagName('resultMsg')[0] || {}).textContent || '' : '';
         if (code && code.trim() !== '00') throw new Error(msg || 'API 오류');
 
-        var itemsEl = body ? body.getElementsByTagName('items')[0] : null;
-        var itemEl = itemsEl ? itemsEl.getElementsByTagName('item')[0] : null;
+        const itemsEl = body ? body.getElementsByTagName('items')[0] : null;
+        const itemEl = itemsEl ? itemsEl.getElementsByTagName('item')[0] : null;
         if (itemEl) {
           result = {};
-          for (var i = 0; i < itemEl.childNodes.length; i++) {
-            var node = itemEl.childNodes[i];
+          for (let i = 0; i < itemEl.childNodes.length; i++) {
+            const node = itemEl.childNodes[i];
             if (node.nodeType === 1) result[node.nodeName] = (node.textContent || '').trim();
           }
         }
@@ -104,25 +104,25 @@
 
   function parseXmlListResponse(text) {
     if (!text || (text.trim().indexOf('<') !== 0)) throw new Error('응답 형식 오류');
-    var trimmed = text.trim();
+    const trimmed = text.trim();
     if (trimmed.toLowerCase().indexOf('<html') >= 0 || trimmed.toLowerCase().indexOf('<!doctype') >= 0) {
       throw new Error('API가 HTML을 반환했습니다.');
     }
 
-    var list = [];
+    let list = [];
     try {
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(trimmed.replace(/^\uFEFF/, ''), 'text/xml');
-      var err = doc.querySelector('parsererror');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(trimmed.replace(/^\uFEFF/, ''), 'text/xml');
+      const err = doc.querySelector('parsererror');
       if (!err) {
-        var body = doc.getElementsByTagName('body')[0];
-        var itemsEl = body ? body.getElementsByTagName('items')[0] : null;
-        var itemEls = itemsEl ? itemsEl.getElementsByTagName('item') : [];
-        for (var i = 0; i < itemEls.length; i++) {
-          var item = itemEls[i];
-          var obj = {};
-          for (var j = 0; j < item.childNodes.length; j++) {
-            var node = item.childNodes[j];
+        const body = doc.getElementsByTagName('body')[0];
+        const itemsEl = body ? body.getElementsByTagName('items')[0] : null;
+        const itemEls = itemsEl ? itemsEl.getElementsByTagName('item') : [];
+        for (let i = 0; i < itemEls.length; i++) {
+          const item = itemEls[i];
+          const obj = {};
+          for (let j = 0; j < item.childNodes.length; j++) {
+            const node = item.childNodes[j];
             if (node.nodeType === 1) obj[node.nodeName] = (node.textContent || '').trim();
           }
           if (Object.keys(obj).length > 0) list.push(obj);
@@ -136,12 +136,12 @@
 
   window.CountryApi = {
     loadCountries: function () {
-      var url = buildUrl('/getCountryBasicList', { numOfRows: '300' });
+      const url = buildUrl('/getCountryBasicList', { numOfRows: '300' });
       return fetchApi(url).then(parseXmlListResponse);
     },
 
     loadCountryInfo: function (countryName) {
-      var url = buildUrl('/getCountryBasicList', { countryName: countryName, numOfRows: '1' });
+      const url = buildUrl('/getCountryBasicList', { countryName: countryName, numOfRows: '1' });
       return fetchApi(url).then(parseXmlResponse);
     }
   };

@@ -1,7 +1,7 @@
 // (function () {
 //   'use strict';
 
-//   var app = document.getElementById('app');
+//   const app = document.getElementById('app');
 //   if (!app) return;
 
 //   app.innerHTML = '<p class="loading">로딩 중...</p>';

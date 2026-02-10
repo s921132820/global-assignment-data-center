@@ -36,17 +36,17 @@
   <script src="js/main.js"></script>
   <script>
     (function () {
-      var selectEl = document.getElementById('country');
-      var btnEl = document.getElementById('btn-select-country');
+      const selectEl = document.getElementById('country');
+      const btnEl = document.getElementById('btn-select-country');
       if (!selectEl || !btnEl) return;
 
       CountryApi.loadCountries()
         .then(function (countries) {
           if (!countries || countries.length === 0) return;
           countries.forEach(function (c) {
-            var name = c.countryNmae || c.countryName || c.name || '';
+            const name = c.countryNmae || c.countryName || c.name || '';
             if (!name) return;
-            var opt = document.createElement('option');
+            const opt = document.createElement('option');
             opt.value = name;
             opt.textContent = name;
             selectEl.appendChild(opt);
@@ -57,7 +57,7 @@
         });
 
       btnEl.addEventListener('click', function () {
-        var value = selectEl.value.trim();
+        const value = selectEl.value.trim();
         if (!value) {
           alert('국가를 선택해 주세요.');
           return;

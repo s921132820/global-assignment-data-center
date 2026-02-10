@@ -8,9 +8,9 @@
         return;
       }
 
-      var html = '<div class="country-list">';
+      let html = '<div class="country-list">';
       countries.forEach(function (c) {
-        var name = c.countryNmae || c.countryName || c.name || '-';
+        const name = c.countryNmae || c.countryName || c.name || '-';
         html += '<div class="country-card">';
         html += '<a href="pages/country.html?name=' + encodeURIComponent(name) + '">';
         if (c.imgUrl) html += '<img src="' + escapeHtml(c.imgUrl) + '" alt="" class="flag" />';
@@ -29,12 +29,12 @@
         return;
       }
 
-      var name = country.countryNmae || country.countryName || country.name || '-';
-      var nameEn = country.countryEnName || country.nameEn || '-';
-      var continent = country.continent || '-';
-      var basic = (country.basic || '').replace(/\n/g, '<br>').replace(/ㅇ/g, '•');
+      const name = country.countryNmae || country.countryName || country.name || '-';
+      const nameEn = country.countryEnName || country.nameEn || '-';
+      const continent = country.continent || '-';
+      const basic = (country.basic || '').replace(/\n/g, '<br>').replace(/ㅇ/g, '•');
 
-      var html = '<div class="country-detail">';
+      let html = '<div class="country-detail">';
       if (country.imgUrl) html += '<img src="' + escapeHtml(country.imgUrl) + '" alt="" class="country-flag" />';
       html += '<h2>' + escapeHtml(name) + '</h2>';
       html += '<p><strong>영문명:</strong> ' + escapeHtml(nameEn) + '</p>';
@@ -47,7 +47,7 @@
 
   function escapeHtml(str) {
     if (!str) return '';
-    var div = document.createElement('div');
+    const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
   }

@@ -1,11 +1,11 @@
 (function () {
   'use strict';
 
-  var container = document.getElementById('country-detail');
+  const container = document.getElementById('country-detail');
   if (!container) return;
 
-  var params = new URLSearchParams(window.location.search);
-  var name = params.get('name');
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
 
   if (!name) {
     container.innerHTML = '<p class="error">국가를 선택해 주세요.</p>';
