@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/page.css" />
 </head>
 <body>
-  <header class="header">
+  <!-- <header class="header">
     <h1>해외 국가 데이터 센터</h1>
     <nav>
       <a href="index.html">홈</a>
@@ -18,18 +18,23 @@
       <a href="pages/cost.html">생활비</a>
       <a href="pages/safety.html">치안</a>
     </nav>
-  </header>
-  <div>
-    <h1 class="tx-center">해외 국가 데이터 센터</h1>
-    <p class="tx-center">해외 국가 데이터 센터는 해외 국가 데이터를 제공하는 서비스입니다.</p>
+  </header> -->
+  <div class="container h-100 flex flex-center">
+    <div class="">
+      <div>
+        <h1 class="tx-center">해외 국가 데이터 센터</h1>
+        <p class="tx-center">해외 국가 데이터 센터는 해외 국가 데이터를 제공하는 서비스입니다.</p>
+      </div>
+    
+      <div class="country-select-wrap">
+        <select name="country" id="country">
+          <option value="">국가를 선택해주세요.</option>
+        </select>
+        <button type="button" id="btn-select-country">선택완료</button>
+      </div>
+      <div id="app"></div>
+    </div>
   </div>
-  <div class="country-select-wrap">
-    <select name="country" id="country">
-      <option value="">국가를 선택해주세요.</option>
-    </select>
-    <button type="button" id="btn-select-country">선택완료</button>
-  </div>
-  <div id="app"></div>
 
   <script src="js/api/countryApi.js"></script>
   <script src="js/ui/countryUI.js"></script>

@@ -62,3 +62,28 @@ main {
 .country-select-wrap #btn-select-country:hover {
   background: #0052a3;
 }
+
+/* flex */
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+/* container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.h-100 {
+  height: 100vh;
+}
